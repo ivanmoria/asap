@@ -142,6 +142,34 @@
             color: var(--accent);
             border-bottom: 1px solid var(--accent);
         }
+        /* Ajuste no container para permitir itens lado a lado */
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: row; /* Muda de coluna para linha */
+    flex-wrap: wrap;     /* Permite quebrar linha se não couber (importante para mobile) */
+    gap: 15px;
+    width: 95%;          /* Aumentado um pouco para caber o par */
+    max-width: 900px;    /* Aumentado para suportar dois de 450px lado a lado */
+    margin-top: 40px;
+    justify-content: center; /* Centraliza os itens */
+}
+
+/* Ajuste na largura dos links para que dois caibam lado a lado */
+.app-link {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 22px 28px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    flex: 1 1 300px;     /* Isso faz o botão crescer e ter no mínimo 300px */
+    max-width: 450px;    /* Limita o crescimento para não ficar gigante sozinho */
+}
 
         .fade-in {
             animation: fadeIn 1s ease forwards;
@@ -166,9 +194,9 @@
         <span class="asap-joke">as soon as possible!</span>
     </header>
 
-    <div class="container fade-in">
+  <div class="container fade-in">
         
-        <a href="chords/" class="app-link">
+        <a href="chords/" class="app-link" style="flex: 1 1 100%; max-width: 915px;">
             <div class="app-info">
                 <h2>Chords</h2>
                 <p>Visualização de harmonia e escalas</p>
@@ -179,7 +207,15 @@
         <a href="profiles_improv/" class="app-link">
             <div class="app-info">
                 <h2>Profiles Improv</h2>
-                <p>Conexão e performance em tempo real</p>
+                <p>Painel de Controle (Manual)</p>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+
+        <a href="profiles_improv/tela.html?id=0000" class="app-link">
+            <div class="app-info">
+                <h2>Profiles Improv</h2>
+                <p>Projeção - Conexão automática</p>
             </div>
             <div class="arrow">→</div>
         </a>

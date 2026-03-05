@@ -1,4 +1,4 @@
-    html, body { 
+ html, body { 
       margin: 0; padding: 0; height: 100%; 
       background-color: #000; color: white; 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
@@ -96,10 +96,8 @@
     #peer-info.expanded::before { display: none !important; }
 
     /* Estilos internos */
-    #peer-id-input { background: #000; border: 1px solid #555; color: #2ecc71; font-weight: bold; padding: 6px; border-radius: 6px; width: 60px; text-align: center; appearance: none;-webkit-appearance: none; }
-    #btn-connect { background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.75rem; white-space: nowrap; /* No lugar de apenas -webkit-appearance: none; */
-appearance: none;
--webkit-appearance: none; }
+    #peer-id-input { background: #000; border: 1px solid #555; color: #2ecc71; font-weight: bold; padding: 6px; border-radius: 6px; width: 60px; text-align: center; -webkit-appearance: none; }
+    #btn-connect { background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.75rem; white-space: nowrap; -webkit-appearance: none; }
     #btn-connect.connected { background: transparent; border: 1px solid #2ecc71; color: #2ecc71; }
     #btn-mute-local { background: rgba(255, 255, 255, 0.1); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
@@ -115,5 +113,3 @@ appearance: none;
       }
     }
     body.is-preview #peer-info { display: none !important; }
-
-    
