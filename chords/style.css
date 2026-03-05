@@ -1,0 +1,367 @@
+
+    /* ── BASE & VARIAVEIS ── */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&display=swap');
+
+*, *::before, *::after { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+:root {
+    --bg:     #080810;
+    --panel:  #0f0f1a;
+    --border: #252540;
+    --text:   #c8cfe8;
+    --dim:    #6066a0;
+    --bright: #e8ecff;
+    --c0: #00f2ff;
+}
+
+body {
+    width: 100%; 
+    height: 100vh; 
+    overflow: hidden;
+    background: var(--bg); 
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    display: flex; 
+    flex-direction: column; 
+    padding: 10px; 
+    gap: 10px;
+    touch-action: manipulation; 
+    -webkit-text-size-adjust: none;
+}
+
+/* ── HEADER & TOOLBAR ── */
+.top-toolbar {
+    background: var(--panel); 
+    padding: 8px 15px; 
+    border-radius: 12px;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 15px;
+    border: 1px solid var(--border); 
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+#power-btn { cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.power-ring {
+    width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--dim);
+    display: grid; place-items: center; transition: 0.3s;
+}
+#power-btn.on .power-ring { border-color: #00ff88; box-shadow: 0 0 12px #00ff8866; }
+#power-btn.on svg { fill: #00ff88; }
+#power-btn.on span { color: #00ff88 !important; }
+svg { fill: var(--dim); }
+
+/* ── CHORD DISPLAY & INFO ── */
+#chord-name-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px !important; 
+    font-weight: 400;
+    color: #fff !important;
+    text-transform: none !important;
+}
+
+.chord-suffix {
+    font-size: 13px;
+    font-weight: 300;
+    color: #fff !important;
+    vertical-align: baseline;
+    margin-left: 2px;
+    opacity: 0.8;
+}
+
+
+
+#chord-notes-display {
+    /* Fonte Barlow Condensed: mais suave e profissional que a Mono */
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px !important; /* Aumentei um pouco pois ela é mais fina */
+    color: var(--c0);
+    font-weight: 300; /* Peso mais leve para suavidade */
+    letter-spacing: 1.5px; /* Espaçamento elegante entre as notas */
+    opacity: 0.9;
+    
+    /* Garantindo que tudo fique na horizontal sem cortar */
+    display: block;
+    white-space: nowrap;
+    overflow: visible; 
+    text-overflow: clip;
+    
+    /* Um leve brilho neon suave */
+    text-shadow: 0 0 8px rgba(0, 242, 255, 0.2);
+}
+
+/* Ajuste no container pai para não apertar a fonte nova */
+#chord-info {
+    min-width: 100px; /* Um pouco mais de espaço lateral */
+    width: auto;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 12px;
+    flex-shrink: 0;
+}
+
+/* ── NAVEGAÇÃO & TABS ── */
+.app-container { display: flex; flex: 1; gap: 10px; overflow: hidden; }
+
+.side-nav { display: flex; flex-direction: column; gap: 8px; width: 50px; }
+
+.tab-trigger {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 15px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Share Tech Mono';
+    font-size: 11px;
+    text-transform: uppercase;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.tab-trigger:hover { background: #1a1a2e; color: var(--bright); }
+.tab-trigger.active { 
+    border-color: var(--c0); 
+    color: var(--c0); 
+    background: #112233;
+    box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1);
+}
+
+.tab-content { flex: 1; display: none; flex-direction: column; gap: 10px; overflow-y: auto; }
+.tab-content.active { display: flex; }
+
+/* ── PIANO & CHORD GRID ── */
+.piano-section { display: flex; align-items: center; gap: 10px; background: #000; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); }
+.keyboard { display: flex; height: 45px; }
+.key { border: 1px solid #000; cursor: pointer; border-radius: 0 0 3px 3px; }
+.white { width: 18px; height: 100%; background: #dde; z-index: 1; }
+.white.active { background: var(--c0); }
+.black { width: 12px; height: 28px; background: #111; z-index: 2; margin-left: -6px; margin-right: -6px; }
+.black.active { background: #0099bb; box-shadow: 0 0 8px var(--c0); }
+
+.chord-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 6px;
+    width: 100%;
+    height: auto; 
+    padding: 5px 0;
+}
+
+.chord-btn {
+    background: #1a1a2a; 
+    border: 1px solid var(--border); 
+    color: var(--bright);
+    font-family: 'Share Tech Mono', monospace; 
+    border-radius: 3px; 
+    cursor: pointer; 
+    padding: 15px 5px; 
+    font-size: 10px;
+    min-width: 0;
+    transition: all 0.2s ease;
+}
+
+.chord-btn:hover { background: #252540; border-color: var(--dim); color: #fff; }
+.chord-btn.active { border-color: var(--c0) !important; color: var(--c0) !important; background: #0a1520 !important; }
+
+/* ── CONTROLES (SLIDER & TOGGLE) ── */
+.timebase-group { display: flex; flex-direction: column; min-width: 260px; gap: 15px; padding: 15px; border-radius: 4px; }
+.timebase-label { display: flex; justify-content: space-between; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+.timebase-val { color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 14px; }
+
+input[type=range] { appearance: none; width: 100%; height: 2px; background: rgba(255, 255, 255, 0.1); outline: none; margin: 15px 0; }
+input[type=range]::-webkit-slider-thumb { 
+    appearance: none; width: 12px; height: 24px; background: var(--c0); border-radius: 2px; cursor: ew-resize; 
+    box-shadow: -8px 0 0 -5px var(--c0), 8px 0 0 -5px var(--c0); transition: all 0.15s ease-in-out; border: none;
+}
+input[type=range]:hover::-webkit-slider-thumb { height: 30px; background: #fff; box-shadow: 0 0 15px var(--c0); }
+input[type=range]:active::-webkit-slider-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+
+.toggle-pill {
+    width: 40px;
+    height: 15px;
+    background: #0a0a0a; /* Fundo mais profundo */
+    border: 1px solid #222;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible; /* Garante que o brilho não seja cortado */
+}
+
+/* O "Pino" do Switch */
+.toggle-pill::after {
+    content: '';
+    position: absolute;
+    top: 2px; /* Ajustado para centralizar melhor */
+    left: 3px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #333; /* Cor neutra quando desligado */
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.toggle-pill.on {
+    /* Efeito de vidro colorido: a cor vem do brilho e da borda, não apenas do fundo */
+    background: rgba(0, 0, 0, 0.4); 
+    border-color: var(--osc);
+    box-shadow: 
+        0 0 12px var(--osc),         /* Brilho externo suave */
+        inset 0 0 4px var(--osc);    /* Brilho interno (efeito neon) */
+}
+
+.toggle-pill.on::after {
+    left: 26px; /* Ajuste preciso para a nova largura */
+    background: #fff;
+    box-shadow: 0 0 5px #fff; /* O pino também brilha quando ativo */
+}
+
+/* Efeito de Hover */
+.toggle-pill:hover {
+    border-color: #555;
+    background: #151515;
+}
+
+.toggle-pill.on:hover {
+    filter: brightness(1.3);
+}
+
+/* ── OSCILLATORS & VISUALIZERS ── */
+#osc-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex-shrink: 0; }
+.osc-card {
+    background: var(--panel); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--border);
+    box-shadow: inset 0 2px 10px -5px var(--osc); transition: transform 0.2s, border-color 0.2s;
+}
+.osc-card:hover { border-color: var(--osc); transform: translateY(-2px); }
+
+.osc-name { font-size: .6rem; color: var(--dim); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+.note-pitch { font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: var(--osc); line-height: 1; font-weight: bold; }
+.note-hz { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: var(--dim); opacity: 0.8; }
+
+.sum-canvas-container {
+    flex: 1; position: relative; background: radial-gradient(circle at center, #101025 0%, #000 100%);
+    border-radius: 12px; border: 1px solid var(--border); overflow: hidden;
+}
+#sum-canvas { width: 100%; height: 100%; display: block; }
+
+/* ── NOTE DISPLAY & INDICATORS ── */
+#note-display {
+    font-family: 'Share Tech Mono'; color: var(--c0); font-size: 12px; border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 10px; line-height: 1.1; cursor: pointer; position: relative; min-width: 50px; display: flex; flex-direction: column; justify-content: center;
+}
+#enharmonic-indicator {
+    position: absolute; top: 50%; left: 15px; transform: translateY(-50%); font-size: 24px;
+    color: rgba(255, 255, 255, 0.08); pointer-events: none; z-index: 0; display: none;
+}
+#note-display.has-accidental #enharmonic-indicator { display: block; }
+#note-text, #hz-text { position: relative; z-index: 1; }
+
+/* ── FOOTER / CREDIT ── */
+.author-credit {
+    margin-top: 8px; padding: 6px 10px; background: rgba(0, 0, 0, 0.3); border: 1px dashed var(--border); 
+    border-radius: 6px; font-family: 'Share Tech Mono', monospace; text-align: center; opacity: 0.5; transition: 0.2s;
+}
+.author-credit:hover { opacity: 1; border-color: var(--c0); background: rgba(0, 0, 0, 0.5); }
+.author-name { color: var(--c0); font-size: 13px; font-weight: bold; display: block; text-transform: uppercase; }
+.author-status { color: #fff; font-size: 10px; }
+.dev-tag { color: #ffcc00; font-size: 9px; font-weight: 800; }
+
+/* ── RESPONSIVIDADE ── */
+
+/* MOBILE */
+@media (max-width: 768px) {
+    body { overflow-y: auto; height: auto; padding: 5px; }
+    .top-toolbar { flex-direction: column; padding: 10px; gap: 12px; align-items:center;}
+    .top-toolbar > div:nth-child(2) { width: 100%; border-left: none !important; padding-left: 0 !important; }
+    .chord-grid { grid-template-columns: repeat(4, 1fr); }
+    .chord-btn { padding: 12px 0; }
+.author-credit {
+        margin: 10px auto 0 auto !important; 
+        /* O segredo está aqui: fit-content faz o bloco ter o tamanho do texto */
+        width: fit-content; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2); /* Se quiser um fundo suave apenas no nome */
+        padding: 5px 15px; /* Respiro interno para o fundo não colar na letra */
+        border-radius: 8px;
+    }
+    .app-container { flex-direction: column; }
+    .side-nav { flex-direction: row; width: 100%; height: 45px; }
+    .tab-trigger { writing-mode: horizontal-tb; flex: 1; font-size: 10px; }
+    #osc-row { grid-template-columns: 1fr; }
+    .sum-canvas-container { height: 250px; }
+    .chord-container-wrap { width: 100% !important; flex: none !important; border-left: none !important; margin-top: 5px; }
+}
+
+/* ── DESKTOP (PC) - CONFIGURAÇÃO FINAL DO SCROLL ── */
+@media (min-width: 769px) {
+    body { padding: 15px; }
+    
+    .top-toolbar {
+        min-height: 80px; 
+        max-height: 120px; /* Impede que o header cresça demais */
+        display: grid; 
+        grid-template-columns: auto 1fr auto; 
+        align-items: center; 
+        gap: 20px; 
+        padding: 10px 20px;
+    }
+
+    #power-btn .power-ring { width: 42px !important; height: 42px !important; border-width: 3px !important; }
+    .piano-section { flex-shrink: 0; min-width: 420px; height: 70px; }
+
+    /* ── AQUI ESTÁ O SCROLL: ── */
+    .chord-container-wrap { 
+        flex: 1; 
+        width: 100%; 
+        height: 70px;            /* Altura fixa necessária para o scroll aparecer */
+        overflow-y: auto !important; /* Habilita o scroll vertical */
+        overflow-x: hidden;
+        border-left: 1px solid var(--border);
+        padding: 5px 10px 5px 15px;
+        margin-left: 10px;
+    }
+
+    .chord-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+        gap: 6px;
+        width: 100%;
+        height: auto; /* A grid flui naturalmente dentro do wrap */
+    }
+
+    /* Estilização da Barra de Rolagem para ela ficar visível e bonita */
+    .chord-container-wrap::-webkit-scrollbar { 
+        width: 5px; 
+    }
+    .chord-container-wrap::-webkit-scrollbar-track { 
+        background: rgba(0,0,0,0.2); 
+        border-radius: 10px;
+    }
+    .chord-container-wrap::-webkit-scrollbar-thumb { 
+        background: var(--border); 
+        border-radius: 10px;
+    }
+    .chord-container-wrap::-webkit-scrollbar-thumb:hover { 
+        background: var(--c0); 
+    }
+
+    .chord-btn { height: 30px; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .author-credit { min-width: 140px; margin-left: 10px; }
+}
