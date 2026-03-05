@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel de Controle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <link rel="stylesheet" href="control.css">
+
+</head>
+<body>
+
+<div id="lock-screen">
+  <div class="login-box">
+    <h2 id="login-status">Digite o ID da Tela</h2>
+    <input type="tel" id="target-id" maxlength="4" placeholder="0000">
+    <p style="color: #666; margin-top: 20px;">A conexão será automática ao digitar 4 dígitos.</p>
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+      <a href="tela.html" target="_blank" style="color: #3498db; text-decoration: none; font-size: 0.9em; font-weight: bold;">
+        Abrir Tela de Projeção
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="active-id-badge" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #222; color: #00BFFF; padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 0.9em; border: 1px solid #444; z-index: 100;">
+  ID: <span id="display-id">----</span>
+</div>
+
+<button id="langToggleBtn" onclick="toggleLang()" class="btn-pt">PT</button>
+
+<h1 data-i18n="title">Painel de Controle</h1>
+
+<div class="row">
+  <div class="card">
+    <h2>
+      <span data-i18n="part1">Participante 1:</span>
+      <input type="text" id="leftNameInput" data-i18n-placeholder="insertName" placeholder="inserir nome" />
+      <button id="leftUpdateBtn" class="update-name-btn">✔️</button>
+    </h2>
+    <div class="participant-row">
+      <input type="range" id="leftRoleSlider" min="0" max="4" step="1" value="0" />
+      <span id="leftRoleLabel" style="text-align: center; font-weight: bold;">Dependente</span>
+      <div class="role-buttons" id="leftRoleButtons">
+        <button data-role="Dependent">Dependent</button>
+        <button data-role="Follower">Follower</button>
+        <button data-role="Partner">Partner</button>
+        <button data-role="Leader">Leader</button>
+        <button data-role="Resister">Resister</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>
+      <span data-i18n="part2">Participante 2:</span>
+      <input type="text" id="rightNameInput" data-i18n-placeholder="insertName" placeholder="inserir nome" />
+      <button id="rightUpdateBtn" class="update-name-btn">✔️</button>
+    </h2>
+    <div class="participant-row">
+      <input type="range" id="rightRoleSlider" min="0" max="4" step="1" value="0" />
+      <span id="rightRoleLabel" style="text-align: center; font-weight: bold;">Dependente</span>
+      <div class="role-buttons" id="rightRoleButtons">
+        <button data-role="Dependent">Dependent</button>
+        <button data-role="Follower">Follower</button>
+        <button data-role="Partner">Partner</button>
+        <button data-role="Leader">Leader</button>
+        <button data-role="Resister">Resister</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card random-mode">
+    <h2 data-i18n="randMode">🔀 Modo Aleatório</h2>
+    <button id="audioToggleBtn" onclick="toggleAudio()">🔊 Audio: ON</button>
+    
+    <div style="display:flex; justify-content:center; gap:5px; margin-bottom:10px;">
+      <button onclick="prevRandom()" data-i18n="btnPrev">⬅️ Voltar</button>
+      <button onclick="nextRandom()" data-i18n="btnNext">Avançar ➡️</button>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
+      <button id="toggleRandomBtn" onclick="toggleRandom()">Iniciar</button>
+      <label data-i18n="minTime">Tempo (s):</label>
+      <input id="minInterval" type="number" min="1" value="5" style="width:50px" />
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:5px;">
+      <button onclick="exportCSV()" data-i18n="btnExport">📥 CSV</button>
+      <button id="recordToggleBtn" data-i18n-placeholder="btnRec">🎥 Gravar</button>
+    </div>
+  </div>
+</div>
+
+<div class="preview-card">
+  <p style="text-align: center;"><a href="tela.html" target="_blank" data-i18n="openTab" style="color:#00BFFF">🔗 Abrir tela de projeção</a></p>
+  <iframe id="previewIframe" src="about:blank"></iframe>
+</div>
+
+<script src="control.js"></script>
+
+</body>
+</html>

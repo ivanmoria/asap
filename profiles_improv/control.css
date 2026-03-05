@@ -1,0 +1,37 @@
+  body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
+    h1 { text-align: center; margin-bottom: 10px; }
+    .row { display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 30px; }
+    .card { background: #1e1e1e; padding: 15px 15px 10px 15px; margin: 10px; border-radius: 10px; flex: 1 1 300px; max-width: 400px; position: relative; }
+    .card h2 { margin-top: 0; margin-bottom: 10px; font-size: 1.3em; color: #f0f0f0; }
+    button { margin: 5px 5px 5px 0; padding: 10px 14px; font-size: 1em; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s; user-select: none; }
+    button:hover { background: #555; }
+    
+    #audioToggleBtn { background: #e67e22; font-weight: bold; width: 100%; margin-bottom: 10px; }
+    #audioToggleBtn.muted { background: #7f8c8d; }
+
+    input[type=number], input[type=text] { width: 140px; padding: 6px 8px; font-size: 1em; border-radius: 5px; border: none; margin-left: 10px; background: #333; color: white; }
+    .participant-row { display: flex; flex-direction: column; gap: 6px; }
+    .preview-card { width: 100%; background: #1e1e1e; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+    .preview-card iframe { width: 100%; height: 280px; border: none; border-radius: 8px; }
+    
+    .update-name-btn { margin-left: 10px; background: #27ae60; color: #fff; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; }
+
+    input[type=range] { width: 100%; margin: 10px 0; cursor: pointer; }
+    .role-buttons { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .role-buttons button { flex: 1 1 110px; font-size: 0.85em; background: #444; }
+
+    #langToggleBtn { position: absolute; top: 20px; right: 20px; color: white; font-weight: bold; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; z-index: 2000; }
+    .btn-pt { background-color: #27ae60 !important; }
+    .btn-en { background-color: #2980b9 !important; }
+
+    #lock-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #121212; z-index: 1000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .login-box { background: #1e1e1e; padding: 40px; border-radius: 20px; text-align: center; border: 2px solid #333; }
+    #target-id { 
+      background: #333; color: #2ecc71; border: none; padding: 15px; 
+      font-size: 2.5em; width: 150px; text-align: center; border-radius: 10px; 
+      letter-spacing: 5px; margin-top: 20px;
+    }

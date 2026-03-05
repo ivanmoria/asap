@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeção – Improvisação Musical</title>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+<link rel="stylesheet" href="tela.css">
+</head><body class="">
+
+<div id="peer-info" onclick="toggleMobileMenu(event)">
+  
+  <button id="btn-mute-local" onclick="event.stopPropagation(); toggleLocalMute()" title="Mute Local">🔊</button>
+  <button id="btn-lang-local" onclick="event.stopPropagation(); toggleLocalLang()" style="background: #333; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-weight: bold; font-size: 0.7rem;">PT</button>
+  
+  <span style="font-size: 0.8rem; color: #aaa; white-space: nowrap;">ID:</span>
+  <input type="text" id="peer-id-input" maxlength="4" onclick="event.stopPropagation()">
+  <button id="btn-connect" onclick="event.stopPropagation(); startConnection()">Conectar</button>
+</div>
+
+<main class="container">
+  <section class="participant left" id="left-participant">
+    <div class="role" id="left-role"></div>
+    <div class="description" id="left-description"></div>
+    <div class="name" id="left-name"></div>
+  </section>
+  
+  <section class="participant right" id="right-participant">
+    <div class="role" id="right-role"></div>
+    <div class="description" id="right-description"></div>
+    <div class="name" id="right-name"></div>
+  </section>
+</main>
+
+
+<script src="tela.js"></script>
+
+</body>
+</html>
