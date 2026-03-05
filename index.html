@@ -2,13 +2,195 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Harmonic Lab - Mid-Slider Logic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASAP | Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=Caveat&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #2ecc71;
+            --joke-color: #ff4757;
+            --text-main: #e0e0e0;
+            --text-dim: #888;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
 
-<link rel="stylesheet" href="style.css">
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        header {
+            margin-top: 15vh;
+            text-align: center;
+            position: relative; /* Para posicionar o rabisco */
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .tagline {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* O Rabisco "As Soon As Possible" */
+        .asap-joke {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--joke-color);
+            opacity: 0.8;
+            transform: rotate(-10deg);
+            display: block;
+            position: absolute;
+            right: -20px;
+            bottom: 10px;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 90%;
+            max-width: 450px;
+            margin-top: 40px;
+        }
+
+        .app-link {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 22px 28px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .app-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent);
+            transform: translateX(8px);
+        }
+
+        .app-info h2 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .app-info p {
+            margin: 5px 0 0 0;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .arrow {
+            font-size: 0.9rem;
+            opacity: 0.2;
+            transition: 0.3s;
+        }
+
+        .app-link:hover .arrow {
+            opacity: 1;
+            color: var(--accent);
+            transform: translateX(3px);
+        }
+
+        footer {
+            padding: 60px 40px;
+            text-align: center;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            header { margin-top: 10vh; }
+            .asap-joke { right: 10px; font-size: 1.3rem; }
+        }
+    </style>
 </head>
-
-
 <body>
+
+    <header class="fade-in">
+        <h1>ASAP</h1>
+        <div class="tagline">Audio System & Advanced Profiles</div>
+        <span class="asap-joke">as soon as possible!</span>
+    </header>
+
+    <div class="container fade-in">
+        
+        <a href="chords/" class="app-link">
+            <div class="app-info">
+                <h2>Chords</h2>
+                <p>Visualização de harmonia e escalas</p>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+
+        <a href="profiles_improv/" class="app-link">
+            <div class="app-info">
+                <h2>Profiles Improv</h2>
+                <p>Conexão e performance em tempo real</p>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+
+    </div>
+
+    <footer class="fade-in">
+        DESENVOLVIDO POR <br>
+        <a href="https://ivanmoria.github.io/">IVAN MORIA</a> <br>
+        <span style="opacity: 0.4; font-size: 0.6rem; text-transform: uppercase;">Portfólio Bibliográfico • Publicações</span>
+    </footer>
+
 </body>
 </html>
