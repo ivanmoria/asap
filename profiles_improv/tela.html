@@ -1,50 +1,48 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projeção – Improvisação Musical</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Projeção – Improvisação Musicoterápica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=Syne+Mono&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="tela.css">
+</head>
+<body>
 
+<div id="welcome-panel">
+  <div class="welcome-header">
+    <p class="welcome-subtitle" id="t-subtitle">Workshop de Improvisação · UFMG</p>
+    <h1 class="welcome-title" id="t-title">NÍVEIS DE INTERAÇÃO</h1>
+  </div>
+  <button class="btn-audio-play" id="btn-master-audio" onclick="toggleAudioDescription()">
+    <span class="play-dot"></span>
+    <span id="audio-text">Ouvir Explicação</span>
+  </button>
+  <div id="welcome-text-container"></div>
+  <div class="info-grid" id="info-grid"></div>
+</div>
 
-<link rel="stylesheet" href="tela.css">
-   
-
-
-
-</head><body class="">
-
-<div id="peer-info" onclick="toggleMobileMenu(event)">
-  
-  <button id="btn-mute-local" onclick="event.stopPropagation(); toggleLocalMute()" title="Mute Local">🔊</button>
-  <button id="btn-lang-local" onclick="event.stopPropagation(); toggleLocalLang()" style="background: #333; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-weight: bold; font-size: 0.7rem;">PT</button>
-  
-  <span style="font-size: 0.8rem; color: #aaa; white-space: nowrap;">ID:</span>
-  <input type="text" id="peer-id-input" maxlength="4" onclick="event.stopPropagation()">
+<div id="peer-info" onclick="toggleMenu(event)">
+  <button id="btn-mute-local" class="active" onclick="event.stopPropagation(); toggleMute()">🔇</button>
+  <button id="btn-lang-local" onclick="event.stopPropagation(); toggleLocalLang()">PT</button>
+  <input type="tel" id="peer-id-input" maxlength="4" placeholder="0000" onclick="event.stopPropagation()">
   <button id="btn-connect" onclick="event.stopPropagation(); startConnection()">Conectar</button>
 </div>
 
 <main class="container">
   <section class="participant left" id="left-participant">
-    <div class="role" id="left-role"></div>
+    <div class="role" id="left-role">Aguardando...</div>
     <div class="description" id="left-description"></div>
     <div class="name" id="left-name"></div>
   </section>
-  
   <section class="participant right" id="right-participant">
-    <div class="role" id="right-role"></div>
+    <div class="role" id="right-role">Aguardando...</div>
     <div class="description" id="right-description"></div>
     <div class="name" id="right-name"></div>
   </section>
 </main>
-
 <script src="tela.js"></script>
-
-
-<script>
-  
-</script>
 </body>
 </html>

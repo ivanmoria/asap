@@ -1,16 +1,55 @@
-
-
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <title>Painel de Controle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; margin: 0; padding: 20px; overflow-x: hidden; }
+    h1 { text-align: center; margin-bottom: 10px; }
+    .row { display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 30px; }
+    .card { background: #1e1e1e; padding: 15px 15px 10px 15px; margin: 10px; border-radius: 10px; flex: 1 1 300px; max-width: 400px; position: relative; }
+    .card h2 { margin-top: 0; margin-bottom: 10px; font-size: 1.3em; color: #f0f0f0; }
+    button { margin: 5px 5px 5px 0; padding: 10px 14px; font-size: 1em; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s; user-select: none; }
+    button:hover { background: #555; }
+    
+    #audioToggleBtn { background: #e67e22; font-weight: bold; width: 100%; margin-bottom: 10px; border-radius: 8px; }
+    #audioToggleBtn.muted { background: #7f8c8d; }
 
+    input[type=number], input[type=text] { width: 140px; padding: 6px 8px; font-size: 1em; border-radius: 5px; border: none; margin-left: 10px; background: #333; color: white; border: 1px solid #444; }
+    input[type=text]:focus { border-color: #27ae60; outline: none; }
+    
+    .participant-row { display: flex; flex-direction: column; gap: 6px; }
+    .preview-card { width: 100%; background: #1e1e1e; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+    .preview-card iframe { width: 100%; height: 280px; border: none; border-radius: 8px; }
+    
+    .update-name-btn { margin-left: 10px; background: #27ae60; color: #fff; border: none; border-radius: 4px; padding: 4px 12px; cursor: pointer; }
 
-<link rel="stylesheet" href="control.css">
+    input[type=range] { width: 100%; margin: 10px 0; cursor: pointer; }
+    .role-buttons { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .role-buttons button { flex: 1 1 110px; font-size: 0.85em; background: #444; }
 
+    #langToggleBtn { position: absolute; top: 20px; right: 20px; color: white; font-weight: bold; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; z-index: 2000; }
+    .btn-pt { background-color: #27ae60 !important; }
+    .btn-en { background-color: #2980b9 !important; }
+
+    #lock-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #121212; z-index: 3000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .login-box { background: #1e1e1e; padding: 40px; border-radius: 20px; text-align: center; border: 2px solid #333; }
+    #target-id { 
+      background: #333; color: #2ecc71; border: none; padding: 15px; 
+      font-size: 2.5em; width: 150px; text-align: center; border-radius: 10px; 
+      letter-spacing: 5px; margin-top: 20px;
+    }
+
+    #connection-manager { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 1000; font-family: sans-serif; }
+    .status-container { display: flex; align-items: center; background: rgba(20, 20, 20, 0.9); padding: 6px 16px; border-radius: 30px; border: 1px solid #444; }
+    #status-dot { width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; margin-right: 10px; }
+  </style>
 </head>
 <body>
 
@@ -27,8 +66,12 @@
   </div>
 </div>
 
-<div id="active-id-badge" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #222; color: #00BFFF; padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 0.9em; border: 1px solid #444; z-index: 100;">
-  ID: <span id="display-id">----</span>
+<div id="connection-manager">
+  <div class="status-container">
+    <div id="status-dot"></div>
+    <span style="color: #888; font-size: 0.75em; text-transform: uppercase; margin-right: 8px;">ID: <strong id="display-id" style="color: #2ecc71">----</strong></span>
+    <span id="screens-count" style="color: #eee; font-size: 0.85em;">0 participantes</span>
+  </div>
 </div>
 
 <button id="langToggleBtn" onclick="toggleLang()" class="btn-pt">PT</button>
@@ -38,13 +81,13 @@
 <div class="row">
   <div class="card">
     <h2>
-      <span data-i18n="part1">Participante 1:</span>
-      <input type="text" id="leftNameInput" data-i18n-placeholder="insertName" placeholder="inserir nome" />
+      <span data-i18n="part1">P1:</span>
+      <input type="text" id="leftNameInput" placeholder="nome..." data-i18n-placeholder="insertName" />
       <button id="leftUpdateBtn" class="update-name-btn">✔️</button>
     </h2>
     <div class="participant-row">
       <input type="range" id="leftRoleSlider" min="0" max="4" step="1" value="0" />
-      <span id="leftRoleLabel" style="text-align: center; font-weight: bold;">Dependente</span>
+      <span id="leftRoleLabel" style="text-align: center; font-weight: bold; color: #3498db;">Dependente</span>
       <div class="role-buttons" id="leftRoleButtons">
         <button data-role="Dependent">Dependent</button>
         <button data-role="Follower">Follower</button>
@@ -57,13 +100,13 @@
 
   <div class="card">
     <h2>
-      <span data-i18n="part2">Participante 2:</span>
-      <input type="text" id="rightNameInput" data-i18n-placeholder="insertName" placeholder="inserir nome" />
+      <span data-i18n="part2">P2:</span>
+      <input type="text" id="rightNameInput" placeholder="nome..." data-i18n-placeholder="insertName" />
       <button id="rightUpdateBtn" class="update-name-btn">✔️</button>
     </h2>
     <div class="participant-row">
       <input type="range" id="rightRoleSlider" min="0" max="4" step="1" value="0" />
-      <span id="rightRoleLabel" style="text-align: center; font-weight: bold;">Dependente</span>
+      <span id="rightRoleLabel" style="text-align: center; font-weight: bold; color: #3498db;">Dependente</span>
       <div class="role-buttons" id="rightRoleButtons">
         <button data-role="Dependent">Dependent</button>
         <button data-role="Follower">Follower</button>
@@ -73,35 +116,25 @@
       </div>
     </div>
   </div>
+</div>
 
-  <div class="card random-mode">
-    <h2 data-i18n="randMode">🔀 Modo Aleatório</h2>
-    <button id="audioToggleBtn" onclick="toggleAudio()">🔊 Audio: ON</button>
-    
-    <div style="display:flex; justify-content:center; gap:5px; margin-bottom:10px;">
-      <button onclick="prevRandom()" data-i18n="btnPrev">⬅️ Voltar</button>
-      <button onclick="nextRandom()" data-i18n="btnNext">Avançar ➡️</button>
-    </div>
-
-    <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
-      <button id="toggleRandomBtn" onclick="toggleRandom()">Iniciar</button>
-      <label data-i18n="minTime">Tempo (s):</label>
-      <input id="minInterval" type="number" min="1" value="5" style="width:50px" />
-    </div>
-
-    <div style="display:flex; justify-content:center; gap:5px;">
-      <button onclick="exportCSV()" data-i18n="btnExport">📥 CSV</button>
-      <button id="recordToggleBtn" data-i18n-placeholder="btnRec">🎥 Gravar</button>
-    </div>
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+  <h2 data-i18n="randMode">🔀 Modo Aleatório</h2>
+  <button id="audioToggleBtn" onclick="toggleAudio()">🔊 Áudio: LIGADO</button>
+  <div style="display:flex; gap:10px; margin-bottom:15px;">
+    <button id="btnBack" onclick="prevRandom()" style="flex:1" data-i18n="btnBack">⬅️ Voltar</button>
+    <button id="btnNext" onclick="nextRandom()" style="flex:1" data-i18n="btnNext">Avançar ➡️</button>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <button id="toggleRandomBtn" onclick="toggleRandom()" style="flex:2; background: #2ecc71;" data-i18n="btnStart">Iniciar</button>
+    <input id="minInterval" type="number" value="5" style="flex:1; margin:0; text-align:center;">
   </div>
 </div>
 
-<div class="preview-card">
-  <p style="text-align: center;"><a href="tela.html" target="_blank" data-i18n="openTab" style="color:#00BFFF">🔗 Abrir tela de projeção</a></p>
+<div class="preview-card" style="max-width: 800px; margin: 20px auto;">
   <iframe id="previewIframe" src="about:blank"></iframe>
 </div>
 
-  <script src="control.js"></script>
-
+<script src="control.js"></script>
 </body>
 </html>
