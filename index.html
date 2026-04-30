@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASAP | Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Instrument+Sans:wght@300;400;500&family=Caveat:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f8f7f4;
+            --paper: #ffffff;
+            --ink: #18160f;
+            --ink-faint: #9e9b95;
+            --accent: #2a6b4a;
+            --accent-warm: #c4622d;
+            --border: #e4e0d8;
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.07);
+        }
+
+        body.dark {
+            --bg: #111009;
+            --paper: #1c1a15;
+            --ink: #e8e4dc;
+            --ink-faint: #5a5650;
+            --accent: #4fa876;
+            --accent-warm: #e07a4a;
+            --border: #282520;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Instrument Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        /* ── Canvas full-screen behind ── */
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        #canvas-container canvas {
+            display: block;
+            pointer-events: none;
+        }
+
+        /* ── Page content ── */
+        .page {
+            position: relative;
+            z-index: 2;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ── Nav ── */
+        .nav-bar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 28px 0 0;
+        }
+
+        .theme-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--ink-faint);
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .theme-dot:hover {
+            background: var(--accent);
+            transform: scale(1.5);
+        }
+
+        /* ── Header ── */
+        header {
+            padding: 72px 0 56px;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.1s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        .header-rule {
+            width: 32px;
+            height: 2px;
+            background: var(--accent);
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(5rem, 14vw, 9rem);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 0.88;
+            color: var(--ink);
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .header-sub {
+            font-size: 0.6rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            font-weight: 300;
+            margin-top: 16px;
+        }
+
+        .joke-wrap {
+            position: relative;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        /* pencil underline scribble */
+        .joke-wrap::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            right: -4px;
+            bottom: -6px;
+            height: 2px;
+            background: var(--accent-warm);
+            opacity: 0.5;
+            border-radius: 2px;
+            transform: rotate(-1deg);
+        }
+
+        /* left margin bracket */
+        .joke-wrap::after {
+            content: '←';
+            position: absolute;
+            right: calc(100% + 10px);
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Caveat', cursive;
+            font-size: 1.1rem;
+            color: var(--accent-warm);
+            opacity: 0.55;
+        }
+
+        .joke-tag {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            color: var(--accent-warm);
+            opacity: 0.82;
+            display: inline-block;
+            transform: rotate(-4deg);
+            line-height: 1;
+            position: relative;
+        }
+
+        /* ── Section dividers ── */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 52px 0 14px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        .section-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.7rem;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .section-line { flex: 1; height: 1px; background: var(--border); }
+
+        .section-label {
+            font-size: 0.56rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+        }
+
+        /* ── Cards ── */
+        .cards { display: grid; gap: 8px; }
+        .cards-1 { grid-template-columns: 1fr; }
+        .cards-2 { grid-template-columns: 1fr 1fr; }
+
+        @media (max-width: 500px) {
+            .cards-2 { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px 24px;
+            text-decoration: none;
+            color: var(--ink);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            transition:
+                box-shadow 0.4s cubic-bezier(0.22,1,0.36,1),
+                transform 0.4s cubic-bezier(0.22,1,0.36,1),
+                border-color 0.3s;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        /* green left bar */
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+        }
+
+        /* shimmer sweep */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 35%, rgba(42,107,74,0.05) 55%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: rgba(42,107,74,0.3);
+        }
+
+        .card:hover::before { transform: scaleY(1); }
+        .card:hover::after  { transform: translateX(120%); }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.18rem;
+            font-weight: 500;
+            transition: color 0.25s;
+        }
+
+        .card:hover .card-title { color: var(--accent); }
+
+        .card-desc {
+            font-size: 0.6rem;
+            color: var(--ink-faint);
+            letter-spacing: 0.8px;
+            margin-top: 3px;
+        }
+
+        .card-arrow {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.68rem;
+            color: var(--ink-faint);
+            transition:
+                background 0.3s,
+                border-color 0.3s,
+                color 0.3s,
+                transform 0.35s cubic-bezier(0.22,1,0.36,1);
+        }
+
+        .card:hover .card-arrow {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            transform: rotate(-45deg);
+        }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 72px;
+            padding-bottom: 56px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            opacity: 0;
+            animation: fadeUp 0.7s 1.2s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        .footer-line { flex: 1; height: 1px; background: var(--border); }
+
+        .footer-text {
+            font-size: 0.56rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            text-align: center;
+            line-height: 2;
+        }
+
+        .footer-text a {
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.25s;
+        }
+        .footer-text a:hover { color: var(--accent); }
+
+        /* ── Keyframes ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .d1  { animation-delay: 0.35s; }
+        .d2  { animation-delay: 0.45s; }
+        .d3  { animation-delay: 0.55s; }
+        .d4  { animation-delay: 0.60s; }
+        .d5  { animation-delay: 0.65s; }
+        .d6  { animation-delay: 0.70s; }
+        .d7  { animation-delay: 0.75s; }
+
+        @media (max-width: 560px) {
+            header { padding: 52px 0 40px; }
+            .page  { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div class="page">
+
+        <nav class="nav-bar">
+            <button class="theme-dot" id="themeToggle" aria-label="Alternar tema"></button>
+        </nav>
+
+        <header>
+            <div class="header-rule"></div>
+            <h1><em>ASAP</em></h1>
+            <div class="header-sub">Audio System &amp; Advanced Profiles</div>
+            <div style="margin-top: 18px; padding-left: 4px;">
+                <div class="joke-wrap">
+                    <span class="joke-tag">as soon as possible!</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- I — Harmonia -->
+        <div class="section-divider d1">
+            <span class="section-num">I</span>
+            <div class="section-line"></div>
+            <span class="section-label">Harmonia</span>
+        </div>
+        <div class="cards cards-1">
+            <a href="chords/" class="card d2">
+                <div>
+                    <div class="card-title">Chords</div>
+                    <div class="card-desc">Visualização de harmonia e escalas</div>
+                </div>
+                <div class="card-arrow">↗</div>
+            </a>
+        </div>
+
+        <!-- II — Profiles -->
+        <div class="section-divider d3">
+            <span class="section-num">II</span>
+            <div class="section-line"></div>
+            <span class="section-label">Profiles Improv</span>
+        </div>
+        <div class="cards cards-2">
+            <a href="IAPS/Autonomy/grupos/control.html" class="card d4">
+                <div>
+                    <div class="card-title">Painel de Controle</div>
+                    <div class="card-desc">Manual</div>
+                </div>
+                <div class="card-arrow">↗</div>
+            </a>
+            <a href="IAPS/Autonomy/grupos/tela.html?id=0000" class="card d5">
+                <div>
+                    <div class="card-title">Projeção</div>
+                    <div class="card-desc">Conexão automática</div>
+                </div>
+                <div class="card-arrow">↗</div>
+            </a>
+        </div>
+<!-- III — Bibliográfico -->
+<div class="section-divider d6">
+    <span class="section-num">III</span>
+    <div class="section-line"></div>
+    <span class="section-label">Material Bibliográfico</span>
+</div>
+<div class="cards cards-1">
+    <a href="IAPS/" class="card d7">
+        <div>
+            <div class="card-title">IAPS</div>
+            <div class="card-desc">Material bibliográfico</div>
+        </div>
+        <div class="card-arrow">↗</div>
+    </a>
+</div>
+
+        <footer>
+            <div class="footer-line"></div>
+            <div class="footer-text">
+                Desenvolvido por <a href="https://ivanmoria.github.io/">Ivan Moria</a><br>
+                <span style="opacity:.45">Portfólio Bibliográfico · Publicações</span>
+            </div>
+            <div class="footer-line"></div>
+        </footer>
+
+    </div>
+
+    <script>
+        /* ── Theme ── */
+        let isDarkMode = false;
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark', isDarkMode);
+        });
+
+        /* ── p5 sketch ── */
+        new p5(function(p) {
+            const NUM   = 30;
+            const RANGE = 6;
+            const COUNT = 6;
+
+            let trails = [];
+            let explosion      = false;
+            let explStrength   = 8;
+
+            function makeFlatTrail() {
+                return {
+                    ax: new Array(NUM).fill(p.random(p.width  || window.innerWidth)),
+                    ay: new Array(NUM).fill(window.innerHeight * 2)
+                };
+            }
+
+            p.setup = function() {
+                let cnv = p.createCanvas(p.windowWidth, p.windowHeight);
+                cnv.parent('canvas-container');
+                p.frameRate(60);
+                for (let i = 0; i < COUNT; i++) trails.push(makeFlatTrail());
+            };
+
+            p.windowResized = function() {
+                p.resizeCanvas(p.windowWidth, p.windowHeight);
+            };
+
+            p.draw = function() {
+                p.clear();
+
+                let dark = document.body.classList.contains('dark');
+                let alpha = dark ? 55 : 35;
+                let base  = dark ? 255 : 15;
+                p.stroke(base, base, base, alpha);
+                p.strokeWeight(1);
+                p.noFill();
+
+                for (let t = 0; t < COUNT; t++) {
+                    let tr = trails[t];
+
+                    // shift history
+                    for (let i = 0; i < NUM - 1; i++) {
+                        tr.ax[i] = tr.ax[i + 1];
+                        tr.ay[i] = tr.ay[i + 1];
+                    }
+
+                    // follow mouse
+                    let xDamp = 0.05 + (t % 3) * 0.022;
+                    let yDamp = 0.04 + (t % 4) * 0.015;
+                    tr.ax[NUM-1] += p.random(-RANGE, RANGE) + (p.mouseX - tr.ax[NUM-1]) * (xDamp + 0.03);
+                    tr.ay[NUM-1] += p.random(-RANGE, RANGE) + (p.mouseY - tr.ay[NUM-1]) * yDamp;
+
+                    tr.ax[NUM-1] = p.constrain(tr.ax[NUM-1], 0, p.width);
+                    tr.ay[NUM-1] = p.constrain(tr.ay[NUM-1], 0, p.height);
+
+                    // explosion
+                    if (explosion) {
+                        for (let i = 0; i < NUM; i++) {
+                            let ang = p.atan2(tr.ay[i] - p.mouseY, tr.ax[i] - p.mouseX);
+                            tr.ax[i] += p.cos(ang) * explStrength * 0.5;
+                            tr.ay[i] += p.sin(ang) * explStrength * 0.5;
+                        }
+                    }
+
+                    // draw trail as polyline
+                    p.beginShape();
+                    for (let i = 0; i < NUM; i++) {
+                        p.vertex(tr.ax[i], tr.ay[i]);
+                    }
+                    p.endShape();
+                }
+
+                // decay
+                if (explosion) {
+                    if (p.frameCount % 10 === 0) explStrength *= 0.89;
+                    if (explStrength < 0.1) {
+                        explosion    = false;
+                        explStrength = 8;
+                    }
+                }
+            };
+
+            p.mousePressed = function() {
+                // only trigger outside card elements
+                if (!p.movedX && !p.movedY) {
+                    explosion = true;
+                }
+                explosion = true;
+            };
+        });
+    </script>
+
+</body>
+</html>
