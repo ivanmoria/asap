@@ -1,0 +1,1312 @@
+
+ /* ── FONTES ── */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── VARIAVEIS ── */
+:root {
+    --bg:     #080810;
+    --panel:  #0f0f1a;
+    --border: #252540;
+    --text:   #c8cfe8;
+    --dim:    #6066a0;
+    --bright: #e8ecff;
+    --c0:     #00f2ff;
+}
+
+/* ── BASE ── */
+body {
+    width: 100%; height: 100vh; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    display: flex; flex-direction: column;
+    padding: 10px; gap: 10px;
+    touch-action: manipulation; -webkit-text-size-adjust: none;
+}
+svg { fill: var(--dim); }
+
+/* ── POWER ── */
+#power-btn { cursor: pointer; }
+.power-ring {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid var(--dim);
+    display: grid; place-items: center; transition: 0.3s;
+}
+#power-btn.on .power-ring { border-color: #00ff88; box-shadow: 0 0 12px #00ff8866; }
+#power-btn.on svg  { fill: #00ff88; }
+#power-btn.on span { color: #00ff88 !important; }
+
+/* ── HEADER ── */
+.top-toolbar {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0;
+    display: flex; flex-direction: column;
+    flex-shrink: 0; z-index: 10;
+}
+/* Linha 1 do header: power+lua | teclado | info | acorde+crédito */
+.header-row1 {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 16px;
+    width: 100%;
+}
+/* Linha 2 do header: botão acorde – visível só no mobile */
+.header-row2 {
+    display: none;
+}
+.header-power {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 2px;
+    flex-shrink: 0; cursor: pointer;
+}
+.header-keyboard-block {
+    display: flex; align-items: center; gap: 8px;
+    flex: 1; min-width: 0;
+    background: #000; border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 12px;
+    overflow: visible;
+}
+.header-kb-wrap { flex-shrink: 0; overflow: visible; position: relative; }
+.header-oct-note {
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    padding-left: 10px; margin-left: 4px;
+}
+.oct-btn {
+    width: 26px; height: 20px;
+    background: #1a1a2a; border: 1px solid var(--border);
+    color: var(--bright); font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 3px; cursor: pointer; padding: 0; transition: 0.15s;
+}
+.oct-btn:hover { border-color: var(--c0); color: var(--c0); }
+
+#note-display {
+    font-family: 'Share Tech Mono'; cursor: pointer;
+    text-align: center; min-width: 44px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+#note-text { font-size: 20px; display: block; color: var(--c0); }
+#hz-text   { font-size: 9px; opacity: .65; display: block; color: var(--text); }
+
+#chord-info {
+    border-left: 1px solid rgba(255,255,255,0.12);
+    padding-left: 10px;
+    display: flex; flex-direction: column; justify-content: center;
+    min-width: 90px;
+}
+#chord-name-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 400; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chord-suffix { font-size: 13px; font-weight: 300; opacity: 0.85; margin-left: 2px; }
+#chord-notes-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; color: var(--c0); font-weight: 300;
+    letter-spacing: 1px; opacity: 0.9; white-space: nowrap;
+    text-shadow: 0 0 8px rgba(0,242,255,0.2);
+}
+
+.header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+#theme-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--panel);
+    cursor: pointer; display: grid; place-items: center;
+    font-size: 16px; transition: 0.2s; flex-shrink: 0;
+}
+#theme-btn:hover { border-color: var(--c0); transform: scale(1.12); }
+
+#fab-chord-btn, #fab-chord-btn-desktop {
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    background: var(--panel); border: 1px solid var(--c0); color: var(--c0);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    cursor: pointer; border-radius: 6px;
+    padding: 5px 12px; height: 34px;
+    text-transform: uppercase; white-space: nowrap;
+    transition: background 0.2s, box-shadow 0.2s; flex-shrink: 0;
+}
+#fab-chord-btn:hover, #fab-chord-btn-desktop:hover { background: rgba(0,242,255,0.08); box-shadow: 0 0 10px rgba(0,242,255,0.2); }
+#fab-chord-btn .fab-icon, #fab-chord-btn-desktop .fab-icon { font-size: 15px; line-height: 1; }
+
+.author-credit {
+    padding: 5px 10px; background: rgba(0,0,0,0.3);
+    border: 1px dashed var(--border); border-radius: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    text-align: center; opacity: 0.5; transition: 0.2s;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.author-credit:hover { opacity: 1; border-color: var(--c0); background: rgba(0,0,0,0.5); }
+.author-name   { color: var(--c0); font-size: 11px; font-weight: bold; display: block; text-transform: uppercase; }
+.author-status { color: #fff; font-size: 9px; }
+.dev-tag       { color: #ffcc00; font-size: 8px; font-weight: 800; }
+
+/* ── MODAL ACORDES ── */
+#fab-chord-modal {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(4,4,8,0.92);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    /* CENTRALIZADO em todas as telas */
+    flex-direction: column; align-items: center; justify-content: center;
+}
+#fab-chord-modal.open { display: flex; }
+#fab-modal-inner {
+    width: 94%; max-width: 960px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 20px; padding: 20px 20px 24px;
+    overflow: hidden;
+    animation: popModal 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 40px rgba(0,242,255,0.06);
+}
+@keyframes popModal {
+    from { transform: scale(0.88); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+.fab-modal-handle { display: none; } /* sem handle – não é bottom sheet */
+.fab-modal-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 4px; color: var(--dim);
+    text-transform: uppercase; margin-bottom: 20px; text-align: center;
+}
+#fab-modal-inner .chord-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 8px;
+}
+#fab-modal-inner .chord-btn {
+    padding: 12px 6px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+/* Botão fechar modal */
+#fab-modal-close {
+    position: absolute; top: 16px; right: 20px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--dim); font-size: 18px; line-height: 1;
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; display: grid; place-items: center;
+    transition: 0.2s;
+}
+#fab-modal-close:hover { border-color: var(--c0); color: var(--c0); }
+#fab-modal-inner { position: relative; }
+
+/* ── TECLADO ── */
+.keyboard {
+    position: relative; height: 52px;
+    display: flex; align-items: flex-start;
+    flex-shrink: 0; overflow: visible;
+}
+.key { cursor: pointer; border-radius: 0 0 4px 4px; box-sizing: border-box; }
+.key.white {
+    position: relative; width: 20px; height: 52px;
+    background: #dde; border: 1px solid #556;
+    z-index: 1; flex-shrink: 0; transition: background 0.1s;
+}
+.key.white:hover  { background: #eef; }
+.key.white.active { background: var(--c0); border-color: var(--c0); box-shadow: 0 0 8px rgba(0,242,255,.4); }
+.key.black {
+    position: absolute; width: 12px; height: 32px;
+    background: #111; border: 1px solid #000;
+    z-index: 2; transition: background 0.1s;
+}
+.key.black:hover  { background: #333; }
+.key.black.active { background: #0099bb; box-shadow: 0 0 8px var(--c0); }
+
+/* ── NAVEGAÇÃO ── */
+.app-container { display: flex; flex: 1; gap: 10px; overflow: hidden; }
+.side-nav      { display: flex; flex-direction: column; gap: 8px; width: 50px; }
+.tab-trigger {
+    background: var(--panel); border: 1px solid var(--border);
+    color: var(--dim); padding: 15px 0; border-radius: 8px;
+    cursor: pointer; writing-mode: vertical-rl;
+    font-family: 'Share Tech Mono'; font-size: 11px;
+    text-transform: uppercase; transition: 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.tab-trigger:hover  { background: #1a1a2e; color: var(--bright); }
+.tab-trigger.active { border-color: var(--c0); color: var(--c0); background: #112233; box-shadow: inset 0 0 10px rgba(0,242,255,0.1); }
+.tab-content        { flex: 1; display: none; flex-direction: column; gap: 10px; overflow-y: auto; }
+.tab-content.active { display: flex; }
+
+/* ── GRID DE ACORDES ── */
+.chord-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 6px; width: 100%;
+}
+.chord-btn {
+    background: #1a1a2a; border: 1px solid var(--border); color: var(--bright);
+    font-family: 'Share Tech Mono', monospace;
+    border-radius: 3px; cursor: pointer;
+    padding: 14px 5px; font-size: 10px;
+    min-width: 0; transition: all 0.2s ease;
+}
+.chord-btn:hover  { background: #252540; border-color: var(--dim); color: #fff; }
+.chord-btn.active { border-color: var(--c0) !important; color: var(--c0) !important; background: #0a1520 !important; }
+
+/* ── SLIDERS & TOGGLES ── */
+.timebase-group { display: flex; flex-direction: column; min-width: 260px; gap: 15px; padding: 15px; border-radius: 4px; }
+.timebase-label { display: flex; justify-content: space-between; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+.timebase-val   { color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 14px; }
+
+input[type=range] { appearance: none; width: 100%; height: 2px; background: rgba(255,255,255,0.1); outline: none; margin: 15px 0; }
+input[type=range]::-webkit-slider-thumb {
+    appearance: none; width: 12px; height: 24px; background: var(--c0);
+    border-radius: 2px; cursor: ew-resize;
+    box-shadow: -8px 0 0 -5px var(--c0), 8px 0 0 -5px var(--c0);
+    transition: all 0.15s ease-in-out; border: none;
+}
+input[type=range]:hover::-webkit-slider-thumb  { height: 30px; background: #fff; box-shadow: 0 0 15px var(--c0); }
+input[type=range]:active::-webkit-slider-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+
+.toggle-pill {
+    width: 40px; height: 15px; background: #0a0a0a;
+    border: 1px solid #222; border-radius: 20px;
+    cursor: pointer; position: relative;
+    display: flex; align-items: center;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1); overflow: visible;
+}
+.toggle-pill::after {
+    content: ''; position: absolute;
+    top: 2px; left: 3px; width: 9px; height: 9px;
+    border-radius: 50%; background: #333;
+    transition: all 0.25s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.5); z-index: 2;
+}
+.toggle-pill.on { background: rgba(0,0,0,0.4); border-color: var(--osc); box-shadow: 0 0 12px var(--osc), inset 0 0 4px var(--osc); }
+.toggle-pill.on::after  { left: 26px; background: #fff; box-shadow: 0 0 5px #fff; }
+.toggle-pill:hover      { border-color: #555; background: #151515; }
+.toggle-pill.on:hover   { filter: brightness(1.3); }
+
+/* ── OSCILADORES ── */
+#osc-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex-shrink: 0; }
+.osc-card {
+    background: var(--panel); border-radius: 10px; padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    border: 1px solid var(--border);
+    box-shadow: inset 0 2px 10px -5px var(--osc);
+    transition: transform 0.2s, border-color 0.2s;
+}
+.osc-card:hover { border-color: var(--osc); transform: translateY(-2px); }
+.osc-name   { font-size: .6rem; color: var(--dim); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+.note-pitch { font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: var(--osc); line-height: 1; font-weight: bold; }
+.note-hz    { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: var(--dim); opacity: 0.8; }
+
+.sum-canvas-container {
+    flex: 1; position: relative;
+    background: radial-gradient(circle at center, #101025 0%, #000 100%);
+    border-radius: 12px; border: 1px solid var(--border); overflow: hidden;
+}
+#sum-canvas { width: 100%; height: 100%; display: block; }
+
+/* ── VOICINGS ── */
+.fret-diagram-wrap {
+    background: var(--panel); border-radius: 12px;
+    border: 1px solid var(--border); padding: 12px;
+    transition: background 0.3s, border-color 0.3s;
+    flex: 1 1 260px; min-width: 240px; max-width: 420px;
+}
+.fret-diagram-wrap[data-pinned="1"] {
+    border-color: var(--c0);
+    box-shadow: 0 0 0 1px var(--c0), 0 4px 20px rgba(0,242,255,0.12);
+}
+.card-pin-btn { opacity: 0.35; transition: opacity 0.2s; }
+.card-pin-btn:hover { opacity: 1 !important; }
+.fret-diagram-wrap[data-pinned="1"] .card-pin-btn { opacity: 1; }
+.card-drag-handle:active { cursor: grabbing; }
+
+/* ── LIGHT THEME ── */
+body.light .top-toolbar         { background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,.10); border-color: #dde; }
+body.light .header-keyboard-block { background: #e8ecf8 !important; border-color: #ccd0e8 !important; }
+body.light .key.white           { background: #fff; border-color: #bbb; }
+body.light .key.white:hover     { background: #f0f4ff; }
+body.light .key.black           { background: #2a2d3e; }
+body.light .key.black.active    { background: var(--c0); }
+body.light .power-ring          { border-color: #aab; background: #f0f2f8; }
+body.light #power-btn.on .power-ring { border-color: #00aa66; box-shadow: 0 0 12px #00aa6644; }
+body.light .oct-btn             { background: #f0f4ff; color: #2a2d3e; }
+body.light .chord-btn           { background: #f4f6fc; border-color: #ccd0e4; color: #2a2d3e; }
+body.light .chord-btn:hover     { background: #e6eaf8; }
+body.light .chord-btn.active    { background: #e0f0ff !important; }
+body.light .tab-trigger         { background: #f4f6fc; border-color: #ccd0e4; color: #7078a0; }
+body.light .tab-trigger.active  { background: #e0f4ff; border-color: var(--c0); color: var(--c0); }
+body.light .tab-trigger:hover   { background: #e8edf8; color: #1e2235; }
+body.light .osc-card            { background: #fff; border-color: #cdd2e8; }
+body.light .sum-canvas-container { background: radial-gradient(circle at center,#e8edf8 0%,#d8ddf0 100%); border-color: #ccd; }
+body.light .toggle-pill         { background: #dde2f0; border-color: #c0c8e0; }
+body.light .toggle-pill::after  { background: #9098b8; }
+body.light .toggle-pill.on      { background: rgba(200,230,255,.6); }
+body.light .toggle-pill.on::after { background: #fff; }
+body.light .author-credit       { border-color: #cdd2e8; background: rgba(255,255,255,.7); }
+body.light .author-credit:hover { border-color: var(--c0); background: #fff; }
+body.light .fret-diagram-wrap   { background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08); border-color: #cdd2e8; }
+body.light svg                  { fill: var(--dim); }
+body.light #chord-name-display  { color: #1e2235 !important; }
+body.light #chord-notes-display { text-shadow: none; }
+
+
+/* ── HEADER ESTRUTURA ── */
+.header-left-group {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    flex-shrink: 0;
+}
+.header-power { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.power-label  { font-size: 7px; font-weight: 700; color: var(--dim); }
+
+/* ── VOICING KEYBOARD ── */
+.voicing-piano-panel {
+    background: #000;
+    border-radius: 8px;
+    padding: 8px 14px 12px 14px;
+    overflow-x: auto; overflow-y: visible;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.voicing-piano-panel::-webkit-scrollbar { display: none; }
+
+#voicing-keyboard {
+    height: 52px;
+    flex-shrink: 0;
+}
+
+/* Labels das notas no teclado da aba */
+.vk-label {
+    position: absolute;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 3;
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: bold;
+    color: #fff;
+    text-shadow:
+        0 0 4px rgba(0,0,0,1),
+        0 1px 3px rgba(0,0,0,1),
+        0 -1px 3px rgba(0,0,0,0.8);
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+    body { overflow-y: auto; height: auto; padding: 5px; gap: 5px; }
+
+    .top-toolbar {
+        position: sticky; top: 5px; z-index: 100;
+        background: rgba(15,15,26,0.95) !important;
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-color: rgba(37,37,64,0.8) !important;
+    }
+    body.light .top-toolbar { background: rgba(255,255,255,0.97) !important; }
+
+    /* Linha 1 */
+    .header-row1 { padding: 6px 10px; gap: 6px; }
+
+    /* Power + lua: compactos em coluna */
+    .header-left-group { flex-direction: column; gap: 3px; }
+    .power-ring   { width: 24px !important; height: 24px !important; border-width: 1.5px !important; }
+    .power-ring svg { width: 11px !important; height: 11px !important; }
+    .power-label  { font-size: 6px !important; }
+    #theme-btn    { width: 24px !important; height: 24px !important; font-size: 13px !important; }
+
+    /* Teclado: scroll horizontal */
+    .header-keyboard-block {
+        flex: 1; min-width: 0;
+        overflow-x: auto; overflow-y: visible;
+        scrollbar-width: none; padding: 4px 8px;
+    }
+    .header-keyboard-block::-webkit-scrollbar { display: none; }
+
+    /* Nota + acorde visíveis */
+    #chord-info  { display: flex !important; min-width: 65px; padding-left: 6px; }
+    #chord-name-display  { font-size: 13px !important; }
+    #chord-notes-display { font-size: 9px !important; letter-spacing: 0 !important; white-space: normal !important; }
+    #note-text   { font-size: 15px !important; }
+    #hz-text     { font-size: 8px !important; }
+    .header-right { display: none !important; }
+
+    /* Linha 2: botão acorde dentro do header */
+    .header-row2 {
+        display: flex; justify-content: center;
+        padding: 0 10px 7px 10px; width: 100%;
+    }
+    .header-row2 #fab-chord-btn {
+        display: flex; align-items: center; justify-content: center; gap: 5px;
+        background: rgba(0,242,255,0.06); border: 1px solid var(--c0); color: var(--c0);
+        font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1.5px;
+        cursor: pointer; border-radius: 6px; padding: 5px 0; height: 28px;
+        text-transform: uppercase; white-space: nowrap; width: 100%;
+        transition: background 0.2s;
+    }
+    .header-row2 #fab-chord-btn .fab-icon { font-size: 12px; }
+
+    /* Modal mobile */
+    #fab-modal-inner {
+        width: 96%; border-radius: 16px; padding: 16px 12px 20px;
+    }
+    #fab-modal-inner .chord-grid {
+        grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important;
+    }
+    #fab-modal-inner .chord-btn { padding: 12px 4px !important; font-size: 11px !important; }
+    #fab-modal-inner { padding: 20px 14px 24px !important; }
+
+    .chord-grid  { grid-template-columns: repeat(4, 1fr); }
+    .chord-btn   { padding: 12px 0; }
+    .app-container  { flex-direction: column; }
+    .side-nav       { flex-direction: row; width: 100%; height: 45px; }
+    .tab-trigger    { writing-mode: horizontal-tb; flex: 1; font-size: 10px; }
+    #osc-row        { grid-template-columns: 1fr; }
+    .sum-canvas-container { height: 250px; }
+}
+
+/* ── DESKTOP ── */
+@media (min-width: 769px) {
+    body { padding: 16px; font-size: 16px; gap: 14px; }
+    .tab-content { font-size: 15px; }
+
+    /* Header: row1 com gap generoso, row2 oculto */
+    .header-row1 { padding: 10px 24px; gap: 18px; }
+    .header-row2 { display: none !important; }
+
+    /* Power e lua lado a lado */
+    .header-left-group { flex-direction: row; gap: 10px; align-items: center; }
+    #power-btn .power-ring  { width: 44px !important; height: 44px !important; border-width: 3px !important; }
+    #power-btn .power-label { font-size: 10px !important; }
+
+    /* Teclado 30% maior */
+    .header-kb-wrap { transform: scale(1.3); transform-origin: left center; margin-right: 36px; }
+
+    /* Nota / Hz */
+    #note-text { font-size: 28px !important; }
+    #hz-text   { font-size: 11px !important; }
+
+    /* Chord info */
+    #chord-name-display  { font-size: 26px !important; }
+    #chord-notes-display { font-size: 16px !important; letter-spacing: 2px !important; }
+    #chord-info          { min-width: 160px; gap: 2px; }
+
+    /* Botões header */
+    #theme-btn       { width: 42px; height: 42px; font-size: 20px; }
+    #fab-chord-btn-desktop { font-size: 13px; height: 42px; padding: 6px 20px; border-radius: 8px; }
+    #fab-chord-btn-desktop .fab-icon { font-size: 18px; }
+    .oct-btn         { width: 32px; height: 24px; font-size: 16px; }
+
+    /* Crédito */
+    .author-name  { font-size: 13px; }
+    .author-status{ font-size: 10px; }
+
+    /* Navegação lateral */
+    .side-nav    { width: 64px; gap: 10px; }
+    .tab-trigger { font-size: 13px; padding: 20px 0; }
+
+    /* Cards de instrumentos */
+    .fret-diagram-wrap { padding: 20px; border-radius: 16px; }
+
+    /* Osciladores */
+    #osc-row   { gap: 14px; }
+    .osc-card  { padding: 18px; border-radius: 14px; gap: 12px; }
+    .osc-name  { font-size: 0.75rem; letter-spacing: 2px; }
+    .note-pitch{ font-size: 2.4rem; }
+    .note-hz   { font-size: 0.85rem; }
+
+    .sum-canvas-container { border-radius: 14px; }
+
+    /* Modal desktop */
+    #fab-modal-inner .chord-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important; gap: 10px !important; }
+    #fab-modal-inner .chord-btn  { padding: 18px 8px !important; font-size: 13px !important; border-radius: 10px !important; }
+    #fab-modal-inner             { padding: 28px 28px 32px !important; }
+    .fab-modal-title             { font-size: 13px; letter-spacing: 5px; margin-bottom: 20px; }
+
+    /* Sliders */
+    .timebase-label { font-size: 12px; }
+    .timebase-val   { font-size: 16px; }
+    input[type=range] { margin: 18px 0; }
+}
+
+/* Animações do welcome */
+@keyframes gridPulse  { 0%,100%{opacity:.6} 50%{opacity:1} }
+@keyframes glowPulse  { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.15);opacity:1} }
+@keyframes fadeSlideUp{ from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes borderPulse{ 0%,100%{border-color:rgba(0,242,255,.3);box-shadow:none} 50%{border-color:rgba(0,242,255,.8);box-shadow:0 0 20px rgba(0,242,255,.2)} }
+
+/* Welcome screen */
+#welcome-screen {
+    position:fixed; inset:0; z-index:9999; background:#040408;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    cursor:pointer; user-select:none; opacity:1; transition:opacity .6s ease;
+}
+#welcome-screen.fade-out { opacity:0; pointer-events:none; }
+
+/* Light theme extras não cobertos pelo style.css */
+body.light { background: var(--bg); color: var(--text); }
+
+/* ── Crédito mobile ───────────────────────── */
+.author-credit-mobile {
+    display: none; /* oculto por padrão; media queries ativam */
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    cursor: pointer;
+    flex-shrink: 0;
+    line-height: 1.35;
+    transition: opacity 0.2s;
+    opacity: 0.85;
+}
+.author-credit-mobile:hover { opacity: 1; }
+
+/* Versão empilhada (celular pequeno): IVAN / MORIÁ com borda */
+.author-credit-mobile .mob-stacked {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,242,255,0.3);
+    border-radius: 5px;
+    padding: 3px 8px;
+    gap: 0px;
+    background: rgba(0,242,255,0.04);
+    min-width: 44px;
+}
+.author-credit-mobile .mob-stacked span {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: rgba(0,242,255,0.85);
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+/* Versão inline (tablet): Ivan Moriá em duas linhas sem borda */
+.author-credit-mobile .mob-name {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: rgba(0,242,255,0.85);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.author-credit-mobile .mob-year {
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: rgba(0,242,255,0.38);
+    white-space: nowrap;
+}
+
+body.light .author-credit-mobile .mob-stacked { border-color: rgba(0,100,180,0.3); background: rgba(0,100,180,0.05); }
+body.light .author-credit-mobile .mob-stacked span { color: rgba(0,100,180,0.8); }
+body.light .author-credit-mobile .mob-name { color: rgba(0,100,180,0.75); }
+body.light .author-credit-mobile .mob-year { color: rgba(0,100,180,0.38); }
+
+/* ── CELULAR PEQUENO (< 480px) ─────────────
+   Linha 1: power | teclado+notas | [IVAN/MORIÁ empilhado com borda]
+   Linha 2: [botão acorde centralizado]
+*/
+@media (max-width: 479px) {
+    /* Mostra crédito mobile na linha 1 */
+    .author-credit-mobile { display: flex; }
+    /* Mostra versão empilhada, esconde inline */
+    .author-credit-mobile .mob-stacked { display: flex; }
+    .author-credit-mobile .mob-name,
+    .author-credit-mobile .mob-year { display: none; }
+
+    /* Esconde crédito desktop */
+    .header-right .author-credit { display: none !important; }
+    /* Esconde botão desktop de acorde */
+    .header-right #fab-chord-btn-desktop { display: none !important; }
+
+    /* Coloca crédito mobile dentro da linha 1 (header-right) */
+    .header-right { display: flex !important; align-items: center; }
+
+    /* Linha 2: botão de acorde centralizado */
+    .header-row2 {
+        display: flex !important;
+        justify-content: center !important;
+        padding: 4px 8px 6px;
+    }
+    /* Esconde crédito na row2 (foi movido para row1) */
+    .header-row2 .author-credit-mobile { display: none !important; }
+}
+
+/* ── TABLET (480px – 768px) ────────────────
+   Linha 1: power | teclado+notas | [botão acorde] [Ivan Moriá inline]
+   Linha 2: oculta
+*/
+@media (min-width: 480px) and (max-width: 768px) {
+    /* Mostra crédito mobile na linha 1 */
+    .author-credit-mobile { display: flex; }
+    /* Mostra versão inline, esconde empilhada */
+    .author-credit-mobile .mob-stacked { display: none; }
+    .author-credit-mobile .mob-name,
+    .author-credit-mobile .mob-year { display: block; }
+
+    /* Esconde crédito desktop */
+    .header-right .author-credit { display: none !important; }
+
+    /* header-right mostra botão desktop + crédito mobile lado a lado */
+    .header-right { display: flex !important; align-items: center; gap: 8px; }
+    .header-right #fab-chord-btn-desktop { display: flex !important; }
+
+    /* Oculta linha 2 inteiramente no tablet */
+    .header-row2 { display: none !important; }
+}
+
+/* ── DESKTOP (> 768px) ─────────────────────
+   Linha 1 normal, linha 2 oculta
+*/
+@media (min-width: 769px) {
+    .author-credit-mobile { display: none !important; }
+    .header-row2 { display: none !important; }
+}
+
+
+
+/* ── LANG TOGGLE ──────────────────────────── */
+.lang-toggle {
+    display:flex; align-items:center; gap:0;
+    border:1px solid rgba(0,242,255,.3); border-radius:4px;
+    overflow:hidden; cursor:pointer; flex-shrink:0;
+    font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px;
+}
+.lang-toggle span {
+    padding:4px 8px; color:rgba(0,242,255,.4);
+    background:transparent; transition:all .2s; user-select:none;
+}
+.lang-toggle span.active {
+    background:rgba(0,242,255,.12); color:var(--c0);
+}
+.lang-toggle:hover { border-color:rgba(0,242,255,.6); }
+
+/* desktop: ao lado do nome */
+.author-credit { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.author-credit-inner { display:flex; align-items:center; gap:8px; }
+
+/* mobile: abaixo do nome empilhado */
+.mob-stacked-wrap { display:flex; flex-direction:column; align-items:center; gap:3px; }
+
+/* mobile border style igual ao desktop */
+.author-credit-mobile .mob-stacked {
+    cursor:pointer;
+    transition: border-color .2s, box-shadow .2s;
+}
+.author-credit-mobile .mob-stacked:hover {
+    border-color:rgba(0,242,255,.7) !important;
+    box-shadow: 0 0 8px rgba(0,242,255,.2);
+}
+body.light .author-credit-mobile .mob-stacked:hover {
+    border-color:rgba(0,100,180,.6) !important;
+}
+
+/* ── CONTACT GRID ─────────────────────────── */
+.contact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+.contact-col-qr, .contact-col-pay { width: 100%; max-width: 320px; }
+
+@media (min-width: 769px) {
+    .contact-grid {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .contact-col-qr { flex: 0 0 200px; }
+    .contact-col-pay { flex: 1; min-width: 180px; max-width: 220px; }
+}
+
+/* ── SUPPORT SCREEN (2nd welcome) ─────────── */
+#support-screen {
+    position:fixed; inset:0; z-index:9998; background:#040408;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden; opacity:0; transition:opacity .4s ease;
+    box-sizing:border-box;
+}
+#support-screen.visible { opacity:1; }
+#support-screen.fade-out { opacity:0; pointer-events:none; }
+
+.support-inner {
+    position:relative; width:100%; max-width:860px;
+    display:flex; flex-direction:column; align-items:center;
+}
+
+.support-header { text-align:center; }
+.support-header-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; color:#fff; letter-spacing:1px; line-height:1; }
+.support-header-sub { font-family:'Share Tech Mono',monospace; color:rgba(200,207,232,.3); letter-spacing:3px; }
+
+/* ── MOBILE (≤600px): tudo centrado, sem espaço vazio ── */
+@media (max-width:600px) {
+    #support-screen { padding:16px; justify-content:flex-start; padding-top:max(20px, env(safe-area-inset-top)); }
+    .support-inner { gap:16px; }
+    .support-header { margin-bottom:0; }
+    .support-header-title { font-size:clamp(22px,7vw,32px); }
+    .support-header-sub { font-size:8px; margin-top:3px; }
+    .support-cols { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; }
+    .support-col-qr {
+        display:flex; flex-direction:column; align-items:center; gap:8px;
+        width:100%; max-width:340px;
+    }
+    .support-col-qr .qr-label { display:none; }
+    .qr-img { width:200px !important; height:200px !important; }
+    .qr-url { display:block !important; text-align:center; }
+    .support-col { width:100%; max-width:340px; }
+    .support-payments { display:flex; flex-direction:column; gap:10px; width:100%; max-width:340px; }
+    .support-enter { margin-top:4px; }
+    .support-enter button { padding:12px 36px; font-size:10px; }
+    .support-hint { margin-top:6px; }
+}
+
+/* ── DESKTOP (>600px): layout compacto horizontal ── */
+@media (min-width:601px) {
+    #support-screen { padding:20px 24px; }
+    .support-inner { gap:14px; }
+    .support-header { margin-bottom:0; }
+    .support-header-title { font-size:clamp(22px,3.5vw,36px); }
+    .support-header-sub { font-size:8px; margin-top:4px; }
+    .support-cols { display:flex; flex-direction:row; align-items:stretch; justify-content:center; gap:16px; width:100%; }
+    .support-col-qr { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+    .support-col-qr .qr-label { display:block; font-family:'Share Tech Mono'; font-size:8px; letter-spacing:2px; color:rgba(0,242,255,.4); }
+    .support-payments { display:flex; flex-direction:column; gap:0; flex:1; min-width:0; max-width:360px;
+        background:rgba(0,0,0,.5); border:1px solid rgba(0,242,255,.15); border-radius:12px; overflow:hidden; }
+    .support-pay-pix { padding:14px; border-bottom:1px solid rgba(0,242,255,.1); }
+    .support-pay-intl { padding:14px; }
+    .support-enter { margin-top:0; }
+    .support-enter button { padding:12px 44px; font-size:11px; }
+    .support-hint { margin-top:6px; }
+}
+
+body.light .osc-canvas-dark { background: #e0e4f0 !important; }
+body.light #power-btn span  { color: var(--dim) !important; }
+body.light #power-btn svg   { fill: var(--dim) !important; }
+body.light #power-btn.on svg  { fill: #00aa66 !important; }
+body.light #power-btn.on span { color: #00aa66 !important; }
+body.light #power-btn.on .power-ring { background: #f0fff8; }
+body.light .fret-diagram-wrap button:not([id^="cfg-btn"]) { background: #f0f4ff !important; border-color: #c0c8e0 !important; color: #6070a0 !important; }
+body.light [id^="cfg-btn-"]    { border-color: #c0c8e0 !important; color: #6070a0 !important; background: transparent !important; }
+body.light [id^="tn-"]         { color: #0077bb !important; background: rgba(0,119,187,0.06) !important; border-color: rgba(0,119,187,0.2) !important; }
+body.light [id^="str-count-"]  { color: #0077bb !important; }
+body.light [id^="chord-label-"]{ color: #0077bb !important; }
+/* ── FONTES ── */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── VARIAVEIS ── */
+:root {
+    --bg:     #080810;
+    --panel:  #0f0f1a;
+    --border: #252540;
+    --text:   #c8cfe8;
+    --dim:    #6066a0;
+    --bright: #e8ecff;
+    --c0:     #00f2ff;
+}
+
+/* ── BASE ── */
+body {
+    width: 100%; height: 100vh; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    display: flex; flex-direction: column;
+    padding: 10px; gap: 10px;
+    touch-action: manipulation; -webkit-text-size-adjust: none;
+}
+svg { fill: var(--dim); }
+
+/* ── POWER ── */
+#power-btn { cursor: pointer; }
+.power-ring {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid var(--dim);
+    display: grid; place-items: center; transition: 0.3s;
+}
+#power-btn.on .power-ring { border-color: #00ff88; box-shadow: 0 0 12px #00ff8866; }
+#power-btn.on svg  { fill: #00ff88; }
+#power-btn.on span { color: #00ff88 !important; }
+
+/* ── HEADER ── */
+.top-toolbar {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0;
+    display: flex; flex-direction: column;
+    flex-shrink: 0; z-index: 10;
+}
+/* Linha 1 do header: power+lua | teclado | info | acorde+crédito */
+.header-row1 {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 16px;
+    width: 100%;
+}
+/* Linha 2 do header: botão acorde – visível só no mobile */
+.header-row2 {
+    display: none;
+}
+.header-power {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 2px;
+    flex-shrink: 0; cursor: pointer;
+}
+.header-keyboard-block {
+    display: flex; align-items: center; gap: 8px;
+    flex: 1; min-width: 0;
+    background: #000; border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 12px;
+    overflow: visible;
+}
+.header-kb-wrap { flex-shrink: 0; overflow: visible; position: relative; }
+.header-oct-note {
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    padding-left: 10px; margin-left: 4px;
+}
+.oct-btn {
+    width: 26px; height: 20px;
+    background: #1a1a2a; border: 1px solid var(--border);
+    color: var(--bright); font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 3px; cursor: pointer; padding: 0; transition: 0.15s;
+}
+.oct-btn:hover { border-color: var(--c0); color: var(--c0); }
+
+#note-display {
+    font-family: 'Share Tech Mono'; cursor: pointer;
+    text-align: center; min-width: 44px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+#note-text { font-size: 20px; display: block; color: var(--c0); }
+#hz-text   { font-size: 9px; opacity: .65; display: block; color: var(--text); }
+
+#chord-info {
+    border-left: 1px solid rgba(255,255,255,0.12);
+    padding-left: 10px;
+    display: flex; flex-direction: column; justify-content: center;
+    min-width: 90px;
+}
+#chord-name-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 400; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chord-suffix { font-size: 13px; font-weight: 300; opacity: 0.85; margin-left: 2px; }
+#chord-notes-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; color: var(--c0); font-weight: 300;
+    letter-spacing: 1px; opacity: 0.9; white-space: nowrap;
+    text-shadow: 0 0 8px rgba(0,242,255,0.2);
+}
+
+.header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+#theme-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--panel);
+    cursor: pointer; display: grid; place-items: center;
+    font-size: 16px; transition: 0.2s; flex-shrink: 0;
+}
+#theme-btn:hover { border-color: var(--c0); transform: scale(1.12); }
+
+#fab-chord-btn, #fab-chord-btn-desktop {
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    background: var(--panel); border: 1px solid var(--c0); color: var(--c0);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    cursor: pointer; border-radius: 6px;
+    padding: 5px 12px; height: 34px;
+    text-transform: uppercase; white-space: nowrap;
+    transition: background 0.2s, box-shadow 0.2s; flex-shrink: 0;
+}
+#fab-chord-btn:hover, #fab-chord-btn-desktop:hover { background: rgba(0,242,255,0.08); box-shadow: 0 0 10px rgba(0,242,255,0.2); }
+#fab-chord-btn .fab-icon, #fab-chord-btn-desktop .fab-icon { font-size: 15px; line-height: 1; }
+
+.author-credit {
+    padding: 5px 10px; background: rgba(0,0,0,0.3);
+    border: 1px dashed var(--border); border-radius: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    text-align: center; opacity: 0.5; transition: 0.2s;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.author-credit:hover { opacity: 1; border-color: var(--c0); background: rgba(0,0,0,0.5); }
+.author-name   { color: var(--c0); font-size: 11px; font-weight: bold; display: block; text-transform: uppercase; }
+.author-status { color: #fff; font-size: 9px; }
+.dev-tag       { color: #ffcc00; font-size: 8px; font-weight: 800; }
+
+/* ── MODAL ACORDES ── */
+#fab-chord-modal {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(4,4,8,0.92);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    /* CENTRALIZADO em todas as telas */
+    flex-direction: column; align-items: center; justify-content: center;
+}
+#fab-chord-modal.open { display: flex; }
+#fab-modal-inner {
+    width: 94%; max-width: 960px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 20px; padding: 20px 20px 24px;
+    overflow: hidden;
+    animation: popModal 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 40px rgba(0,242,255,0.06);
+}
+@keyframes popModal {
+    from { transform: scale(0.88); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+.fab-modal-handle { display: none; } /* sem handle – não é bottom sheet */
+.fab-modal-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 4px; color: var(--dim);
+    text-transform: uppercase; margin-bottom: 20px; text-align: center;
+}
+#fab-modal-inner .chord-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 8px;
+}
+#fab-modal-inner .chord-btn {
+    padding: 12px 6px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+/* Botão fechar modal */
+#fab-modal-close {
+    position: absolute; top: 16px; right: 20px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--dim); font-size: 18px; line-height: 1;
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; display: grid; place-items: center;
+    transition: 0.2s;
+}
+#fab-modal-close:hover { border-color: var(--c0); color: var(--c0); }
+#fab-modal-inner { position: relative; }
+
+/* ── TECLADO ── */
+.keyboard {
+    position: relative; height: 52px;
+    display: flex; align-items: flex-start;
+    flex-shrink: 0; overflow: visible;
+}
+.key { cursor: pointer; border-radius: 0 0 4px 4px; box-sizing: border-box; }
+.key.white {
+    position: relative; width: 20px; height: 52px;
+    background: #dde; border: 1px solid #556;
+    z-index: 1; flex-shrink: 0; transition: background 0.1s;
+}
+.key.white:hover  { background: #eef; }
+.key.white.active { background: var(--c0); border-color: var(--c0); box-shadow: 0 0 8px rgba(0,242,255,.4); }
+.key.black {
+    position: absolute; width: 12px; height: 32px;
+    background: #111; border: 1px solid #000;
+    z-index: 2; transition: background 0.1s;
+}
+.key.black:hover  { background: #333; }
+.key.black.active { background: #0099bb; box-shadow: 0 0 8px var(--c0); }
+
+/* ── NAVEGAÇÃO ── */
+.app-container { display: flex; flex: 1; gap: 10px; overflow: hidden; }
+.side-nav      { display: flex; flex-direction: column; gap: 8px; width: 50px; }
+.tab-trigger {
+    background: var(--panel); border: 1px solid var(--border);
+    color: var(--dim); padding: 15px 0; border-radius: 8px;
+    cursor: pointer; writing-mode: vertical-rl;
+    font-family: 'Share Tech Mono'; font-size: 11px;
+    text-transform: uppercase; transition: 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.tab-trigger:hover  { background: #1a1a2e; color: var(--bright); }
+.tab-trigger.active { border-color: var(--c0); color: var(--c0); background: #112233; box-shadow: inset 0 0 10px rgba(0,242,255,0.1); }
+.tab-content        { flex: 1; display: none; flex-direction: column; gap: 10px; overflow-y: auto; }
+.tab-content.active { display: flex; }
+
+/* ── GRID DE ACORDES ── */
+.chord-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 6px; width: 100%;
+}
+.chord-btn {
+    background: #1a1a2a; border: 1px solid var(--border); color: var(--bright);
+    font-family: 'Share Tech Mono', monospace;
+    border-radius: 3px; cursor: pointer;
+    padding: 14px 5px; font-size: 10px;
+    min-width: 0; transition: all 0.2s ease;
+}
+.chord-btn:hover  { background: #252540; border-color: var(--dim); color: #fff; }
+.chord-btn.active { border-color: var(--c0) !important; color: var(--c0) !important; background: #0a1520 !important; }
+
+/* ── SLIDERS & TOGGLES ── */
+.timebase-group { display: flex; flex-direction: column; min-width: 260px; gap: 15px; padding: 15px; border-radius: 4px; }
+.timebase-label { display: flex; justify-content: space-between; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+.timebase-val   { color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 14px; }
+
+input[type=range] { appearance: none; width: 100%; height: 2px; background: rgba(255,255,255,0.1); outline: none; margin: 15px 0; }
+input[type=range]::-webkit-slider-thumb {
+    appearance: none; width: 12px; height: 24px; background: var(--c0);
+    border-radius: 2px; cursor: ew-resize;
+    box-shadow: -8px 0 0 -5px var(--c0), 8px 0 0 -5px var(--c0);
+    transition: all 0.15s ease-in-out; border: none;
+}
+input[type=range]:hover::-webkit-slider-thumb  { height: 30px; background: #fff; box-shadow: 0 0 15px var(--c0); }
+input[type=range]:active::-webkit-slider-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+
+.toggle-pill {
+    width: 40px; height: 15px; background: #0a0a0a;
+    border: 1px solid #222; border-radius: 20px;
+    cursor: pointer; position: relative;
+    display: flex; align-items: center;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1); overflow: visible;
+}
+.toggle-pill::after {
+    content: ''; position: absolute;
+    top: 2px; left: 3px; width: 9px; height: 9px;
+    border-radius: 50%; background: #333;
+    transition: all 0.25s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.5); z-index: 2;
+}
+.toggle-pill.on { background: rgba(0,0,0,0.4); border-color: var(--osc); box-shadow: 0 0 12px var(--osc), inset 0 0 4px var(--osc); }
+.toggle-pill.on::after  { left: 26px; background: #fff; box-shadow: 0 0 5px #fff; }
+.toggle-pill:hover      { border-color: #555; background: #151515; }
+.toggle-pill.on:hover   { filter: brightness(1.3); }
+
+/* ── OSCILADORES ── */
+#osc-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex-shrink: 0; }
+.osc-card {
+    background: var(--panel); border-radius: 10px; padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    border: 1px solid var(--border);
+    box-shadow: inset 0 2px 10px -5px var(--osc);
+    transition: transform 0.2s, border-color 0.2s;
+}
+.osc-card:hover { border-color: var(--osc); transform: translateY(-2px); }
+.osc-name   { font-size: .6rem; color: var(--dim); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+.note-pitch { font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: var(--osc); line-height: 1; font-weight: bold; }
+.note-hz    { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: var(--dim); opacity: 0.8; }
+
+.sum-canvas-container {
+    flex: 1; position: relative;
+    background: radial-gradient(circle at center, #101025 0%, #000 100%);
+    border-radius: 12px; border: 1px solid var(--border); overflow: hidden;
+}
+#sum-canvas { width: 100%; height: 100%; display: block; }
+
+/* ── VOICINGS ── */
+.fret-diagram-wrap {
+    background: var(--panel); border-radius: 12px;
+    border: 1px solid var(--border); padding: 12px;
+    transition: background 0.3s, border-color 0.3s;
+    flex: 1 1 260px; min-width: 240px; max-width: 420px;
+}
+.fret-diagram-wrap[data-pinned="1"] {
+    border-color: var(--c0);
+    box-shadow: 0 0 0 1px var(--c0), 0 4px 20px rgba(0,242,255,0.12);
+}
+.card-pin-btn { opacity: 0.35; transition: opacity 0.2s; }
+.card-pin-btn:hover { opacity: 1 !important; }
+.fret-diagram-wrap[data-pinned="1"] .card-pin-btn { opacity: 1; }
+.card-drag-handle:active { cursor: grabbing; }
+
+/* ── LIGHT THEME ── */
+body.light .top-toolbar         { background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,.10); border-color: #dde; }
+body.light .header-keyboard-block { background: #e8ecf8 !important; border-color: #ccd0e8 !important; }
+body.light .key.white           { background: #fff; border-color: #bbb; }
+body.light .key.white:hover     { background: #f0f4ff; }
+body.light .key.black           { background: #2a2d3e; }
+body.light .key.black.active    { background: var(--c0); }
+body.light .power-ring          { border-color: #aab; background: #f0f2f8; }
+body.light #power-btn.on .power-ring { border-color: #00aa66; box-shadow: 0 0 12px #00aa6644; }
+body.light .oct-btn             { background: #f0f4ff; color: #2a2d3e; }
+body.light .chord-btn           { background: #f4f6fc; border-color: #ccd0e4; color: #2a2d3e; }
+body.light .chord-btn:hover     { background: #e6eaf8; }
+body.light .chord-btn.active    { background: #e0f0ff !important; }
+body.light .tab-trigger         { background: #f4f6fc; border-color: #ccd0e4; color: #7078a0; }
+body.light .tab-trigger.active  { background: #e0f4ff; border-color: var(--c0); color: var(--c0); }
+body.light .tab-trigger:hover   { background: #e8edf8; color: #1e2235; }
+body.light .osc-card            { background: #fff; border-color: #cdd2e8; }
+body.light .sum-canvas-container { background: radial-gradient(circle at center,#e8edf8 0%,#d8ddf0 100%); border-color: #ccd; }
+body.light .toggle-pill         { background: #dde2f0; border-color: #c0c8e0; }
+body.light .toggle-pill::after  { background: #9098b8; }
+body.light .toggle-pill.on      { background: rgba(200,230,255,.6); }
+body.light .toggle-pill.on::after { background: #fff; }
+body.light .author-credit       { border-color: #cdd2e8; background: rgba(255,255,255,.7); }
+body.light .author-credit:hover { border-color: var(--c0); background: #fff; }
+body.light .fret-diagram-wrap   { background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08); border-color: #cdd2e8; }
+body.light svg                  { fill: var(--dim); }
+body.light #chord-name-display  { color: #1e2235 !important; }
+body.light #chord-notes-display { text-shadow: none; }
+
+
+/* ── HEADER ESTRUTURA ── */
+.header-left-group {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    flex-shrink: 0;
+}
+.header-power { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.power-label  { font-size: 7px; font-weight: 700; color: var(--dim); }
+
+/* ── VOICING KEYBOARD ── */
+.voicing-piano-panel {
+    background: #000;
+    border-radius: 8px;
+    padding: 8px 14px 12px 14px;
+    overflow-x: auto; overflow-y: visible;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.voicing-piano-panel::-webkit-scrollbar { display: none; }
+
+#voicing-keyboard {
+    height: 52px;
+    flex-shrink: 0;
+}
+
+/* Labels das notas no teclado da aba */
+.vk-label {
+    position: absolute;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 3;
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: bold;
+    color: #fff;
+    text-shadow:
+        0 0 4px rgba(0,0,0,1),
+        0 1px 3px rgba(0,0,0,1),
+        0 -1px 3px rgba(0,0,0,0.8);
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+    body { overflow-y: auto; height: auto; padding: 5px; gap: 5px; }
+
+    .top-toolbar {
+        position: sticky; top: 5px; z-index: 100;
+        background: rgba(15,15,26,0.95) !important;
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-color: rgba(37,37,64,0.8) !important;
+    }
+    body.light .top-toolbar { background: rgba(255,255,255,0.97) !important; }
+
+    /* Linha 1 */
+    .header-row1 { padding: 6px 10px; gap: 6px; }
+
+    /* Power + lua: compactos em coluna */
+    .header-left-group { flex-direction: column; gap: 3px; }
+    .power-ring   { width: 24px !important; height: 24px !important; border-width: 1.5px !important; }
+    .power-ring svg { width: 11px !important; height: 11px !important; }
+    .power-label  { font-size: 6px !important; }
+    #theme-btn    { width: 24px !important; height: 24px !important; font-size: 13px !important; }
+
+    /* Teclado: scroll horizontal */
+    .header-keyboard-block {
+        flex: 1; min-width: 0;
+        overflow-x: auto; overflow-y: visible;
+        scrollbar-width: none; padding: 4px 8px;
+    }
+    .header-keyboard-block::-webkit-scrollbar { display: none; }
+
+    /* Nota + acorde visíveis */
+    #chord-info  { display: flex !important; min-width: 65px; padding-left: 6px; }
+    #chord-name-display  { font-size: 13px !important; }
+    #chord-notes-display { font-size: 9px !important; letter-spacing: 0 !important; white-space: normal !important; }
+    #note-text   { font-size: 15px !important; }
+    #hz-text     { font-size: 8px !important; }
+    .header-right { display: none !important; }
+
+    /* Linha 2: botão acorde dentro do header */
+    .header-row2 {
+        display: flex; justify-content: center;
+        padding: 0 10px 7px 10px; width: 100%;
+    }
+    .header-row2 #fab-chord-btn {
+        display: flex; align-items: center; justify-content: center; gap: 5px;
+        background: rgba(0,242,255,0.06); border: 1px solid var(--c0); color: var(--c0);
+        font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1.5px;
+        cursor: pointer; border-radius: 6px; padding: 5px 0; height: 28px;
+        text-transform: uppercase; white-space: nowrap; width: 100%;
+        transition: background 0.2s;
+    }
+    .header-row2 #fab-chord-btn .fab-icon { font-size: 12px; }
+
+    /* Modal mobile */
+    #fab-modal-inner {
+        width: 96%; border-radius: 16px; padding: 16px 12px 20px;
+    }
+    #fab-modal-inner .chord-grid {
+        grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important;
+    }
+    #fab-modal-inner .chord-btn { padding: 12px 4px !important; font-size: 11px !important; }
+    #fab-modal-inner { padding: 20px 14px 24px !important; }
+
+    .chord-grid  { grid-template-columns: repeat(4, 1fr); }
+    .chord-btn   { padding: 12px 0; }
+    .app-container  { flex-direction: column; }
+    .side-nav       { flex-direction: row; width: 100%; height: 45px; }
+    .tab-trigger    { writing-mode: horizontal-tb; flex: 1; font-size: 10px; }
+    #osc-row        { grid-template-columns: 1fr; }
+    .sum-canvas-container { height: 250px; }
+}
+
+/* ── DESKTOP ── */
+@media (min-width: 769px) {
+    body { padding: 16px; font-size: 16px; gap: 14px; }
+    .tab-content { font-size: 15px; }
+
+    /* Header: row1 com gap generoso, row2 oculto */
+    .header-row1 { padding: 10px 24px; gap: 18px; }
+    .header-row2 { display: none !important; }
+
+    /* Power e lua lado a lado */
+    .header-left-group { flex-direction: row; gap: 10px; align-items: center; }
+    #power-btn .power-ring  { width: 44px !important; height: 44px !important; border-width: 3px !important; }
+    #power-btn .power-label { font-size: 10px !important; }
+
+    /* Teclado 30% maior */
+    .header-kb-wrap { transform: scale(1.3); transform-origin: left center; margin-right: 36px; }
+
+    /* Nota / Hz */
+    #note-text { font-size: 28px !important; }
+    #hz-text   { font-size: 11px !important; }
+
+    /* Chord info */
+    #chord-name-display  { font-size: 26px !important; }
+    #chord-notes-display { font-size: 16px !important; letter-spacing: 2px !important; }
+    #chord-info          { min-width: 160px; gap: 2px; }
+
+    /* Botões header */
+    #theme-btn       { width: 42px; height: 42px; font-size: 20px; }
+    #fab-chord-btn-desktop { font-size: 13px; height: 42px; padding: 6px 20px; border-radius: 8px; }
+    #fab-chord-btn-desktop .fab-icon { font-size: 18px; }
+    .oct-btn         { width: 32px; height: 24px; font-size: 16px; }
+
+    /* Crédito */
+    .author-name  { font-size: 13px; }
+    .author-status{ font-size: 10px; }
+
+    /* Navegação lateral */
+    .side-nav    { width: 64px; gap: 10px; }
+    .tab-trigger { font-size: 13px; padding: 20px 0; }
+
+    /* Cards de instrumentos */
+    .fret-diagram-wrap { padding: 20px; border-radius: 16px; }
+
+    /* Osciladores */
+    #osc-row   { gap: 14px; }
+    .osc-card  { padding: 18px; border-radius: 14px; gap: 12px; }
+    .osc-name  { font-size: 0.75rem; letter-spacing: 2px; }
+    .note-pitch{ font-size: 2.4rem; }
+    .note-hz   { font-size: 0.85rem; }
+
+    .sum-canvas-container { border-radius: 14px; }
+
+    /* Modal desktop */
+    #fab-modal-inner .chord-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important; gap: 10px !important; }
+    #fab-modal-inner .chord-btn  { padding: 18px 8px !important; font-size: 13px !important; border-radius: 10px !important; }
+    #fab-modal-inner             { padding: 28px 28px 32px !important; }
+    .fab-modal-title             { font-size: 13px; letter-spacing: 5px; margin-bottom: 20px; }
+
+    /* Sliders */
+    .timebase-label { font-size: 12px; }
+    .timebase-val   { font-size: 16px; }
+    input[type=range] { margin: 18px 0; }
+}
